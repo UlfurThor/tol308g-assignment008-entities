@@ -34,9 +34,24 @@ Bullet.prototype.velY = 1;
 Bullet.prototype.lifeSpan = 3 * SECS_TO_NOMINALS;
 
 Bullet.prototype.update = function (du) {
-    
-    // TODO: Implement this
+    // --TODO-inprogress: Implement this
+    this.cx += this.velX * du;
+    if (this.cx > g_canvas.width) {
+        this.cx -= g_canvas.width;
+    } else if (this.cx < 0) {
+        this.cx -= g_canvas.width;
+    }
 
+    this.cy += this.velX * du;
+    if (this.cy > g_canvas.height) {
+        this.cy -= g_canvas.height;
+    } else if (this.cy < 0) {
+        this.cy -= g_canvas.height;
+    }
+
+    this.lifeSpan -= du;
+    if (this.lifeSpan < 0)
+        this.KILL_ME_NOW = entityManager.KILL_ME_NOW;
     // NB: Remember to handle screen-wrapping... and "death"
 };
 
@@ -46,7 +61,10 @@ Bullet.prototype.setPos = function (cx, cy) {
 }
 
 Bullet.prototype.getPos = function () {
-    return {posX : this.cx, posY : this.cy};
+    return {
+        posX: this.cx,
+        posY: this.cy
+    };
 }
 
 Bullet.prototype.wrapPosition = function () {
@@ -67,7 +85,7 @@ Bullet.prototype.render = function (ctx) {
     // ..YOUR STUFF..
 
     g_sprites.bullet.drawWrappedCentredAt(
-	ctx, this.cx, this.cy, this.rotation
+        ctx, this.cx, this.cy, this.rotation
     );
 
     // ..YOUR STUFF..

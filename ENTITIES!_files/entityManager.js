@@ -25,113 +25,146 @@ with suitable 'data' and 'methods'.
 
 var entityManager = {
 
-// "PRIVATE" DATA
+    // "PRIVATE" DATA
 
-_rocks   : [],
-_bullets : [],
-_ships   : [],
+    _rocks: [],
+    _bullets: [],
+    _ships: [],
 
-_bShowRocks : false,
+    _bShowRocks: false,
 
-// "PRIVATE" METHODS
+    // "PRIVATE" METHODS
 
-_generateRocks : function() {
-    var i,
-	NUM_ROCKS = 4;
+    _generateRocks: function () {
 
-    // TODO: Make `NUM_ROCKS` Rocks!
-},
+        var i,
+            NUM_ROCKS = 4;
 
-_findNearestShip : function(posX, posY) {
+        // TODO: Make `NUM_ROCKS` Rocks!
+    },
 
-    // TODO: Implement this
+    _findNearestShip: function (posX, posY) {
 
-    // NB: Use this technique to let you return "multiple values"
-    //     from a function. It's pretty useful!
+        // TODO: Implement this
+
+        // NB: Use this technique to let you return "multiple values"
+        //     from a function. It's pretty useful!
+        //
+        return {
+            theShip: closestShip, // the object itself
+            theIndex: closestIndex // the array index where it lives
+        };
+    },
+
+    _forEachOf: function (aCategory, fn) {
+        for (var i = 0; i < aCategory.length; ++i) {
+            fn.call(aCategory[i]);
+        }
+    },
+
+    // PUBLIC METHODS
+
+    // A special return value, used by other objects,
+    // to request the blessed release of death!
     //
-    return {
-	theShip : closestShip,   // the object itself
-	theIndex: closestIndex   // the array index where it lives
-    };
-},
+    KILL_ME_NOW: -1,
 
-_forEachOf: function(aCategory, fn) {
-    for (var i = 0; i < aCategory.length; ++i) {
-	fn.call(aCategory[i]);
+    // Some things must be deferred until after initial construction
+    // i.e. thing which need `this` to be defined.
+    //
+    deferredSetup: function () {
+        this._categories = [this._rocks, this._bullets, this._ships];
+    },
+
+    init: function () {
+        this._generateRocks();
+
+        // I could have made some ships here too, but decided not to.
+        //this._generateShip();
+    },
+
+    fireBullet: function (cx, cy, velX, velY, rotation) {
+
+
+        // --TODO-inprogres: Implement this
+        var bullet = new Bullet();
+
+        bullet.cx = cx;
+        bullet.cy = cy;
+        bullet.velX = velX;
+        bullet.velY = velY;
+        bullet.rotation = rotation;
+
+        this._bullets.push(bullet);
+
+    },
+
+    generateShip: function (descr) {
+        // --TODO-inprogres: Implement this
+        var ship = new Ship(descr);
+        this._ships.push(ship);
+    },
+
+    killNearestShip: function (xPos, yPos) {
+        // TODO: Implement this
+
+        // NB: Don't forget the "edge cases"
+    },
+
+    yoinkNearestShip: function (xPos, yPos) {
+        //-----grab and move to mouse pos
+        // TODO: Implement this
+
+        // NB: Don't forget the "edge cases"
+    },
+
+    resetShips: function () {
+        this._forEachOf(this._ships, Ship.prototype.reset);
+    },
+
+    haltShips: function () {
+        this._forEachOf(this._ships, Ship.prototype.halt);
+    },
+
+    toggleRocks: function () {
+        this._bShowRocks = !this._bShowRocks;
+    },
+
+    update: function (du) {
+
+        // --TODO-inprogress: Implement this
+        // NB: Remember to handle the "KILL_ME_NOW" return value!
+        //     and to properly update the array in that case.
+
+        for (let j = 0; j < this._categories.length; j++) {
+            for (let i = this._categories[j].length - 1; i >= 0; i--) {
+                this._categories[j][i].update(du);
+
+                if (this._categories[j][i].KILL_ME_NOW === this.KILL_ME_NOW) {
+                    this._categories[j].splice(i, 1);
+                }
+            }
+
+        }
+
+    },
+
+    render: function (ctx) {
+
+        // --TODO-inprogress: Implement this
+
+        // NB: Remember to implement the ._bShowRocks toggle!
+        // (Either here, or if you prefer, in the Rock objects)
+        // ----added in the rock object
+
+        for (let j = 0; j < this._categories.length; j++) {
+            for (let i = this._categories[j].length - 1; i >= 0; i--) {
+                this._categories[j][i].render(ctx);
+            }
+
+        }
+
     }
-},
-
-// PUBLIC METHODS
-
-// A special return value, used by other objects,
-// to request the blessed release of death!
-//
-KILL_ME_NOW : -1,
-
-// Some things must be deferred until after initial construction
-// i.e. thing which need `this` to be defined.
-//
-deferredSetup : function () {
-    this._categories = [this._rocks, this._bullets, this._ships];
-},
-
-init: function() {
-    this._generateRocks();
-
-    // I could have made some ships here too, but decided not to.
-    //this._generateShip();
-},
-
-fireBullet: function(cx, cy, velX, velY, rotation) {
-
-    // TODO: Implement this
-
-},
-
-generateShip : function(descr) {
-    // TODO: Implement this
-},
-
-killNearestShip : function(xPos, yPos) {
-    // TODO: Implement this
-
-    // NB: Don't forget the "edge cases"
-},
-
-yoinkNearestShip : function(xPos, yPos) {
-    // TODO: Implement this
-
-    // NB: Don't forget the "edge cases"
-},
-
-resetShips: function() {
-    this._forEachOf(this._ships, Ship.prototype.reset);
-},
-
-haltShips: function() {
-    this._forEachOf(this._ships, Ship.prototype.halt);
-},	
-
-toggleRocks: function() {
-    this._bShowRocks = !this._bShowRocks;
-},
-
-update: function(du) {
-
-    // TODO: Implement this
-
-    // NB: Remember to handle the "KILL_ME_NOW" return value!
-    //     and to properly update the array in that case.
-},
-
-render: function(ctx) {
-
-    // TODO: Implement this
-
-    // NB: Remember to implement the ._bShowRocks toggle!
-    // (Either here, or if you prefer, in the Rock objects)
-
-}
 
 }
 

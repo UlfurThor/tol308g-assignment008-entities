@@ -54,7 +54,7 @@ function Rock() {
 }
 
 Rock.prototype.update = function (du) {
-    
+
     // I DID THIS BIT FOR YOU. NICE, AREN'T I?
 
     this.cx += this.velX * du;
@@ -62,7 +62,7 @@ Rock.prototype.update = function (du) {
 
     this.rotation += this.velRot * du;
     this.rotation = util.wrapRange(this.rotation,
-				   0, consts.FULL_CIRCLE);
+        0, consts.FULL_CIRCLE);
 
     this.wrapPosition();
 };
@@ -73,7 +73,10 @@ Rock.prototype.setPos = function (cx, cy) {
 }
 
 Rock.prototype.getPos = function () {
-    return {posX : this.cx, posY : this.cy};
+    return {
+        posX: this.cx,
+        posY: this.cy
+    };
 }
 
 Rock.prototype.wrapPosition = function () {
@@ -82,9 +85,11 @@ Rock.prototype.wrapPosition = function () {
 };
 
 Rock.prototype.render = function (ctx) {
-
-    g_sprites.rock.drawWrappedCentredAt(
-	ctx, this.cx, this.cy, this.rotation
-    );
+    //---- edited - if (entityManager._bShowRocks) added
+    if (entityManager._bShowRocks) {
+        g_sprites.rock.drawWrappedCentredAt(
+            ctx, this.cx, this.cy, this.rotation
+        );
+    }
 
 };
