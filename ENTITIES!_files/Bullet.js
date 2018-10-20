@@ -31,7 +31,7 @@ Bullet.prototype.cx = 200;
 Bullet.prototype.cy = 200;
 Bullet.prototype.velX = 1;
 Bullet.prototype.velY = 1;
-Bullet.prototype.gravEnabled = true;
+Bullet.prototype.gravEnabled = false;
 
 // Convert times from seconds to "nominal" time units.
 Bullet.prototype.lifeSpan = 3 * SECS_TO_NOMINALS;
@@ -47,12 +47,15 @@ Bullet.prototype.update = function (du) {
 };
 
 Bullet.prototype.applyVelocity = function (du) {
+    // updates the velocity of a bullet
+    // borowed HEAVILY from the ship update method
 
-    // s = s + v_ave * t
-    var nextX = this.cx + this.velX * du;
-    var nextY = this.cy + this.velY * du;
 
     // bounce
+    // kept bacause its funny
+    // not curently enabled
+    // s = s + v_ave * t
+    var nextY = this.cy + this.velY * du;
     if (g_useGravity && this.gravEnabled) {
 
         var minY = g_sprites.ship.height / 2;
@@ -68,7 +71,7 @@ Bullet.prototype.applyVelocity = function (du) {
         }
     }
 
-    // s = s + v_ave * t
+    // s = s + v * t
     this.cx += du * this.velX;
     this.cy += du * this.velY;
 }

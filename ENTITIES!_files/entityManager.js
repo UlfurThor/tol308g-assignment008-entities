@@ -40,6 +40,7 @@ var entityManager = {
         var NUM_ROCKS = 4;
 
         // DONE--TODO: Make `NUM_ROCKS` Rocks!
+        // simple use of the new ROCK function
         for (let i = 0; i < NUM_ROCKS; i++) {
             var r = new Rock();
             this._rocks.push(r);
@@ -59,12 +60,10 @@ var entityManager = {
         var dist = Number.MAX_VALUE;
         var wX = g_canvas.width; // xWrap
         var wY = g_canvas.height; // yWrap
-        //console.log("---------");
-        //console.log("posX- " + posX);
-        //console.log("posY- " + posY);
-        for (let i = 0; i < this._ships.length; i++) {
-            var sX = this._ships[i].cx; //x2
-            var sY = this._ships[i].cy; //y2
+        var i;
+        for (i = 0; i < this._ships.length; i++) {
+            var sX = this._ships[i].cx; // ship x2
+            var sY = this._ships[i].cy; //ship y2
 
             var d = util.wrappedDistSq(
                 posX, posY,
@@ -72,19 +71,17 @@ var entityManager = {
                 wX, wY
             );
 
-            d = Math.sqrt(d);
+            // normalisez the distance, used for debuging,
+            //    not used since it is slow
+            //d = Math.sqrt(d);
 
-            //console.log("d- " + d);
-            //console.log("dist- " + dist);
             if (d <= dist) {
                 dist = d;
-                //console.log("d- " + d);
                 closestShip = this._ships[i];
                 closestIndex = i;
             }
 
         }
-        //console.log(closestIndex);
         return {
             theShip: closestShip, // the object itself
             theIndex: closestIndex // the array index where it lives
@@ -122,6 +119,7 @@ var entityManager = {
 
 
         // DONE--TODO-inprogres: Implement this
+        // simply sets evrything based on the input variables
         var bullet = new Bullet();
         bullet.cx = cx;
         bullet.cy = cy;
@@ -136,16 +134,25 @@ var entityManager = {
 
     generateShip: function (descr) {
         // DONE--TODO-inprogres: Implement this
+        // just uses the default constructor
         var ship = new Ship(descr);
         this._ships.push(ship);
     },
 
     killNearestShip: function (xPos, yPos) {
         // DONE--TODO: Implement this
-        var ship = this._findNearestShip(xPos, yPos);
-        if (typeof ship.theShip != 'undefined') {
 
-            ship.theShip.KILL_ME_NOW = this.KILL_ME_NOW;
+        var ship = this._findNearestShip(xPos, yPos);
+        // quick and dirty method of skiping this if no ship exists
+        if (typeof ship.theShip != 'undefined') {
+            // uses the destroy part in the general
+            //    update logic to destroy the ship
+            // not used since a destroyed ship can still fire before it is removed
+            //ship.theShip.KILL_ME_NOW = this.KILL_ME_NOW;
+
+            // imitiate removal of the ship
+            var i = ship.theIndex;
+            this._ships.splice(i, 1);
         }
         // NB: Don't forget the "edge cases"
     },
@@ -153,11 +160,11 @@ var entityManager = {
     yoinkNearestShip: function (xPos, yPos) {
         //-----grab and move to mouse pos
         // DONE--TODO: Implement this
+        // this has a problem in firefox i have not been able to fix
+        //     where the nearest ship follows the mose any time it is moved
         var ship = this._findNearestShip(xPos, yPos);
+        // quick and dirty method of skiping this if no ship exists
         if (typeof ship.theShip != 'undefined') {
-            //if (ship.theShip === null) {
-            //return;
-            //}
             ship.theShip.cx = xPos;
             ship.theShip.cy = yPos;
         }
@@ -186,6 +193,10 @@ var entityManager = {
             for (let i = this._categories[j].length - 1; i >= 0; i--) {
                 this._categories[j][i].update(du);
 
+                // destroys all objects imitiatly
+                // this only afects bullets as ships are destroyed 
+                //     as soon as the K key is hit, 
+                //     and rocks dont hafe a kill condition
                 if (this._categories[j][i].KILL_ME_NOW === this.KILL_ME_NOW) {
                     this._categories[j].splice(i, 1);
                 }
@@ -201,7 +212,10 @@ var entityManager = {
 
         // NB: Remember to implement the ._bShowRocks toggle!
         // (Either here, or if you prefer, in the Rock objects)
-        // ----added in the rock object
+
+
+        // simply iterates yhrough all objects
+        // deciding to render rocks is decided in its render function
 
         for (let j = 0; j < this._categories.length; j++) {
             for (let i = this._categories[j].length - 1; i >= 0; i--) {

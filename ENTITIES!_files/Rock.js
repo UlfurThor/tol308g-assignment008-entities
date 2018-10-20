@@ -47,6 +47,7 @@ function Rock() {
     // speed = c
     var speed = util.randRange(MIN_SPEED, MAX_SPEED);
     this.velX = util.randRange(0, speed);
+    // sqrt used here since it is only called once upn each rocks creation
     this.velY = Math.sqrt(util.square(speed) - util.square(this.velX))
     // a quick and dirty way to set ether component negative
     // should be at least 49.99999% acurate
@@ -71,7 +72,8 @@ function Rock() {
 
 Rock.prototype.update = function (du) {
 
-    // I DID THIS BIT FOR YOU. NICE, AREN'T I? - you are indeed mighty
+    // I DID THIS BIT FOR YOU. NICE, AREN'T I? 
+    // - indeed you are oh mighty lord of mighty
 
     this.cx += this.velX * du;
     this.cy += this.velY * du;
@@ -101,6 +103,7 @@ Rock.prototype.wrapPosition = function () {
 };
 
 Rock.prototype.render = function (ctx) {
+    // DONE--extra added
     //---- edited - if (entityManager._bShowRocks) added
     if (entityManager._bShowRocks) {
         g_sprites.rock.drawWrappedCentredAt(
