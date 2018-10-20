@@ -47,20 +47,20 @@ var g_ctx = g_canvas.getContext("2d");
 // ====================
 
 entityManager.generateShip({
-    cx : 140,
-    cy : 200
+    cx: 140,
+    cy: 200
 });
 
 entityManager.generateShip({
-    cx : 200,
-    cy : 200,
+    cx: 200,
+    cy: 200,
 
-   // numSubSteps : 2
+    // numSubSteps : 2
 });
 
 entityManager.generateShip({
-    cx : 260,
-    cy : 200,
+    cx: 260,
+    cy: 200,
 
     //numSubSteps : 4
 });
@@ -91,9 +91,9 @@ function gatherInputs() {
 // GAME-SPECIFIC UPDATE LOGIC
 
 function updateSimulation(du) {
-    
+
     processDiagnostics();
-    
+
     entityManager.update(du);
 
     // Prevent perpetual firing!
@@ -106,11 +106,11 @@ var g_allowMixedActions = true;
 var g_useGravity = false;
 var g_useAveVel = true;
 
-var KEY_MIXED   = keyCode('M');;
+var KEY_MIXED = keyCode('M');;
 var KEY_GRAVITY = keyCode('G');
 var KEY_AVE_VEL = keyCode('V');
 
-var KEY_HALT  = keyCode('H');
+var KEY_HALT = keyCode('H');
 var KEY_RESET = keyCode('R');
 
 var KEY_0 = keyCode('0');
@@ -121,25 +121,48 @@ var KEY_K = keyCode('K');
 
 function processDiagnostics() {
 
-    if (eatKey(KEY_MIXED))
+    if (eatKey(KEY_MIXED)) {
         g_allowMixedActions = !g_allowMixedActions;
+        console.log("KEY_MIXED - " + g_allowMixedActions);
+    }
+    if (eatKey(KEY_GRAVITY)) {
+        g_useGravity = !g_useGravity;
+        console.log("KEY_GRAVITY - " + g_useGravity);
+    }
 
-    if (eatKey(KEY_GRAVITY)) g_useGravity = !g_useGravity;
+    if (eatKey(KEY_AVE_VEL)) {
+        g_useAveVel = !g_useAveVel;
+        console.log("KEY_AVE_VEL - " + g_useAveVel);
+    }
 
-    if (eatKey(KEY_AVE_VEL)) g_useAveVel = !g_useAveVel;
+    if (eatKey(KEY_HALT)) {
+        entityManager.haltShips();
+        console.log("KEY_HALT - sucsessfull");
+    }
 
-    if (eatKey(KEY_HALT)) entityManager.haltShips();
+    if (eatKey(KEY_RESET)) {
+        entityManager.resetShips();
+        console.log("KEY_RESET - sucsessfull");
+    }
 
-    if (eatKey(KEY_RESET)) entityManager.resetShips();
+    if (eatKey(KEY_0)) {
+        entityManager.toggleRocks();
+        console.log("toggleRocks - " + entityManager._bShowRocks);
+    }
 
-    if (eatKey(KEY_0)) entityManager.toggleRocks();
+    if (eatKey(KEY_1)) {
+        entityManager.generateShip({
+            cx: g_mouseX,
+            cy: g_mouseY
+        });
+        console.log("generateShip - sucsessfull");
+    }
 
-    if (eatKey(KEY_1)) entityManager.generateShip({
-	cx : g_mouseX,
-	cy : g_mouseY});
-
-    if (eatKey(KEY_K)) entityManager.killNearestShip(
-        g_mouseX, g_mouseY);
+    if (eatKey(KEY_K)) {
+        entityManager.killNearestShip(
+            g_mouseX, g_mouseY);
+        console.log("killNearestShip - sucsessfull");
+    }
 }
 
 
@@ -173,8 +196,10 @@ var g_images = {};
 function requestPreloads() {
 
     var requiredImages = {
-	ship   : "https://notendur.hi.is/~pk/308G/images/ship.png",
-	rock   : "https://notendur.hi.is/~pk/308G/images/rock.png"
+        //ship: "https://notendur.hi.is/~pk/308G/images/ship.png",
+        ship: "img/ship.png",
+        //rock: "https://notendur.hi.is/~pk/308G/images/rock.png"
+        rock: "img/rock.png"
     };
 
     imagesPreload(requiredImages, g_images, preloadDone);
