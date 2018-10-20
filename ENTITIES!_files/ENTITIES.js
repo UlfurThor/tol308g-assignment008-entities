@@ -132,7 +132,7 @@ function processDiagnostics() {
 
     if (eatKey(KEY_AVE_VEL)) {
         g_useAveVel = !g_useAveVel;
-        console.log("KEY_AVE_VEL - " + g_dog_useAveVelClear);
+        console.log("KEY_AVE_VEL - " + g_useAveVel);
     }
 
     if (eatKey(KEY_HALT)) {

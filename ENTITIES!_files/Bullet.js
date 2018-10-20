@@ -17,6 +17,8 @@ function Bullet(descr) {
     for (var property in descr) {
         this[property] = descr[property];
     }
+
+    this.life = this.lifeSpan;
 }
 
 // Initial, inheritable, default values
@@ -29,31 +31,47 @@ Bullet.prototype.cx = 200;
 Bullet.prototype.cy = 200;
 Bullet.prototype.velX = 1;
 Bullet.prototype.velY = 1;
+Bullet.prototype.gravEnabled = true;
 
 // Convert times from seconds to "nominal" time units.
 Bullet.prototype.lifeSpan = 3 * SECS_TO_NOMINALS;
 
 Bullet.prototype.update = function (du) {
-    // --TODO-inprogress: Implement this
-    this.cx += this.velX * du;
-    if (this.cx > g_canvas.width) {
-        this.cx -= g_canvas.width;
-    } else if (this.cx < 0) {
-        this.cx -= g_canvas.width;
-    }
-
-    this.cy += this.velX * du;
-    if (this.cy > g_canvas.height) {
-        this.cy -= g_canvas.height;
-    } else if (this.cy < 0) {
-        this.cy -= g_canvas.height;
-    }
-
-    this.lifeSpan -= du;
-    if (this.lifeSpan < 0)
+    // DONE--TODO-inprogress: Implement this
+    this.applyVelocity(du);
+    this.wrapPosition();
+    this.life -= du;
+    if (this.life < 0)
         this.KILL_ME_NOW = entityManager.KILL_ME_NOW;
     // NB: Remember to handle screen-wrapping... and "death"
 };
+
+Bullet.prototype.applyVelocity = function (du) {
+
+    // s = s + v_ave * t
+    var nextX = this.cx + this.velX * du;
+    var nextY = this.cy + this.velY * du;
+
+    // bounce
+    if (g_useGravity && this.gravEnabled) {
+
+        var minY = g_sprites.ship.height / 2;
+        var maxY = g_canvas.height - minY;
+
+        // Ignore the bounce if the bullet is already in
+        // the "border zone" (to avoid trapping them there)
+        if (this.cy > maxY || this.cy < minY) {
+            // do nothing
+        } else if (nextY > maxY || nextY < minY) {
+            this.velY = this.velY * -0.9;
+
+        }
+    }
+
+    // s = s + v_ave * t
+    this.cx += du * this.velX;
+    this.cy += du * this.velY;
+}
 
 Bullet.prototype.setPos = function (cx, cy) {
     this.cx = cx;
@@ -74,20 +92,24 @@ Bullet.prototype.wrapPosition = function () {
 
 Bullet.prototype.render = function (ctx) {
 
-    // TODO: Modify this to implement a smooth "fade-out" during
+    // DONE--TODO: Modify this to implement a smooth "fade-out" during
     // the last third of the bullet's total "lifeSpan"
 
     // NB: You can make things fade by setting `ctx.globalAlpha` to
     // a value between 0 (totally transparent) and 1 (totally opaque).
 
     var fadeThresh = Bullet.prototype.lifeSpan / 3;
+    // ..YOUR STUFF..
+    if (this.life < fadeThresh) {
+        var remaining = this.life / fadeThresh;
+        ctx.globalAlpha = remaining;
+    }
 
     // ..YOUR STUFF..
-
     g_sprites.bullet.drawWrappedCentredAt(
         ctx, this.cx, this.cy, this.rotation
     );
+    ctx.globalAlpha = 1.0;
 
-    // ..YOUR STUFF..
 
 };

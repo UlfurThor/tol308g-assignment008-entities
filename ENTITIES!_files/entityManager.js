@@ -37,10 +37,14 @@ var entityManager = {
 
     _generateRocks: function () {
 
-        var i,
-            NUM_ROCKS = 4;
+        var NUM_ROCKS = 4;
 
-        // TODO: Make `NUM_ROCKS` Rocks!
+        // DONE--TODO: Make `NUM_ROCKS` Rocks!
+        for (let i = 0; i < NUM_ROCKS; i++) {
+            var r = new Rock();
+            this._rocks.push(r);
+
+        }
     },
 
     _findNearestShip: function (posX, posY) {
@@ -86,13 +90,13 @@ var entityManager = {
     fireBullet: function (cx, cy, velX, velY, rotation) {
 
 
-        // --TODO-inprogres: Implement this
+        // DONE--TODO-inprogres: Implement this
         var bullet = new Bullet();
-
         bullet.cx = cx;
         bullet.cy = cy;
         bullet.velX = velX;
         bullet.velY = velY;
+
         bullet.rotation = rotation;
 
         this._bullets.push(bullet);
@@ -100,7 +104,7 @@ var entityManager = {
     },
 
     generateShip: function (descr) {
-        // --TODO-inprogres: Implement this
+        // DONE--TODO-inprogres: Implement this
         var ship = new Ship(descr);
         this._ships.push(ship);
     },
@@ -132,7 +136,7 @@ var entityManager = {
 
     update: function (du) {
 
-        // --TODO-inprogress: Implement this
+        // DONE--TODO-inprogress: Implement this
         // NB: Remember to handle the "KILL_ME_NOW" return value!
         //     and to properly update the array in that case.
 
@@ -151,7 +155,7 @@ var entityManager = {
 
     render: function (ctx) {
 
-        // --TODO-inprogress: Implement this
+        // DONE--TODO-inprogress: Implement this
 
         // NB: Remember to implement the ._bShowRocks toggle!
         // (Either here, or if you prefer, in the Rock objects)
