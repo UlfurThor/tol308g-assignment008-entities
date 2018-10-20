@@ -147,7 +147,7 @@ function processDiagnostics() {
 
     if (eatKey(KEY_0)) {
         entityManager.toggleRocks();
-        console.log("toggleRocks - sucsessfull");
+        console.log("toggleRocks - " + entityManager._bShowRocks);
     }
 
     if (eatKey(KEY_1)) {

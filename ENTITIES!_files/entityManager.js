@@ -49,11 +49,42 @@ var entityManager = {
 
     _findNearestShip: function (posX, posY) {
 
-        // TODO: Implement this
+        // DONE--TODO: Implement this
 
         // NB: Use this technique to let you return "multiple values"
         //     from a function. It's pretty useful!
         //
+        var closestShip;
+        var closestIndex;
+        var dist = Number.MAX_VALUE;
+        var wX = g_canvas.width; // xWrap
+        var wY = g_canvas.height; // yWrap
+        //console.log("---------");
+        //console.log("posX- " + posX);
+        //console.log("posY- " + posY);
+        for (let i = 0; i < this._ships.length; i++) {
+            var sX = this._ships[i].cx; //x2
+            var sY = this._ships[i].cy; //y2
+
+            var d = util.wrappedDistSq(
+                posX, posY,
+                sX, sY,
+                wX, wY
+            );
+
+            d = Math.sqrt(d);
+
+            //console.log("d- " + d);
+            //console.log("dist- " + dist);
+            if (d <= dist) {
+                dist = d;
+                //console.log("d- " + d);
+                closestShip = this._ships[i];
+                closestIndex = i;
+            }
+
+        }
+        //console.log(closestIndex);
         return {
             theShip: closestShip, // the object itself
             theIndex: closestIndex // the array index where it lives
@@ -110,15 +141,26 @@ var entityManager = {
     },
 
     killNearestShip: function (xPos, yPos) {
-        // TODO: Implement this
+        // DONE--TODO: Implement this
+        var ship = this._findNearestShip(xPos, yPos);
+        if (typeof ship.theShip != 'undefined') {
 
+            ship.theShip.KILL_ME_NOW = this.KILL_ME_NOW;
+        }
         // NB: Don't forget the "edge cases"
     },
 
     yoinkNearestShip: function (xPos, yPos) {
         //-----grab and move to mouse pos
-        // TODO: Implement this
-
+        // DONE--TODO: Implement this
+        var ship = this._findNearestShip(xPos, yPos);
+        if (typeof ship.theShip != 'undefined') {
+            //if (ship.theShip === null) {
+            //return;
+            //}
+            ship.theShip.cx = xPos;
+            ship.theShip.cy = yPos;
+        }
         // NB: Don't forget the "edge cases"
     },
 

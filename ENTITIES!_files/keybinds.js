@@ -1,4 +1,6 @@
-
+// refrence for all keybinds
+// this file is not refrenced by any other
+// just used as a reminder
 // diagnostics keybinds
 var KEY_MIXED = keyCode('M');;
 var KEY_GRAVITY = keyCode('G');

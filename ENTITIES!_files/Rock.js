@@ -47,7 +47,7 @@ function Rock() {
     // speed = c
     var speed = util.randRange(MIN_SPEED, MAX_SPEED);
     this.velX = util.randRange(0, speed);
-    this.velY = Math.sqrt(Math.pow(speed, 2) - Math.pow(this.velX, 2))
+    this.velY = Math.sqrt(util.square(speed) - util.square(this.velX))
     // a quick and dirty way to set ether component negative
     // should be at least 49.99999% acurate
     if (Math.random() >= 0.5)
